@@ -9,7 +9,7 @@ const page = () => {
   const [mainTask, setmainTask] = useState([]);
 
   const getChildData = (childData) => {
-    setmainTask([childData, ...mainTask]);
+    setmainTask([...mainTask, childData]);
 
     // COOKIES TRYING
     // let cookieData = JSON.parse(Cookies.get('task-dets'));
@@ -37,20 +37,20 @@ const page = () => {
     renderTask = mainTask.map((task, index) => {
       return <li className='grid grid-cols-[80px_200px_1fr_150px_150px] text-lg gap-4 mb-5' key={index}>
         {/* key acts like ID, if compulosory in react, as react identifies each unquie li using key only. */}
-        <p> {index + 1} </p>
+        <p> {task.completed ? "✅ " + (index+1) :  (index+1)} </p>
         <p>  {task.title} </p>
         <p> {task.desc} </p>
-        <button className='bg-green-400 w-1/2 h-fit text-white rounded-lg hover:cursor-pointer' onClick={(event) => { completeTask(event.target) }}> Done </button>
+        <button className='bg-green-400 w-1/2 h-fit text-white rounded-lg hover:cursor-pointer' onClick={() => { completeTask(index) }}> Done </button>
         <button className='bg-red-400 w-1/2  h-fit rounded-lg hover:cursor-pointer' onClick={() => { deleteTask(index) }}>Delete</button>
       </li>
     })
 
     renderStateMob = mainTask.map((task,index)=>{
       return <div className="task pb-3 border-b-1 border-b-gray-400 flex flex-col" key={index}>
-            <h3 className='text-2xl font-medium'> Task {index+1} </h3>
+            <h3 className='text-2xl font-medium'> {task.completed ? "✅ Task " + (index+1) : "Task " + (index+1)} </h3>
             <div id="title-mob" className='flex gap-4'> <span className='min-w-[105px] font-medium'> Title:- </span>  <h5> {task.title} </h5> </div>
             <div id="desc-mob" className='flex gap-4'> <span className='min-w-[100px] font-medium'> Description:- </span>  <h5> {task.desc} </h5> </div>
-            <button className='mr-5 px-3 py-0.5 bg-green-400 text-white rounded-lg mt-5 w-fit' onClick={(event) => { completeTask(event.target) }}> check </button>
+            <button className='mr-5 px-3 py-0.5 bg-green-400 text-white rounded-lg mt-5 w-fit' onClick={() => { completeTask(index) }}> check </button>
             <button className='mr-5 px-3 py-0.5 bg-red-400 text-white rounded-lg mt-5 w-fit' onClick={() => { deleteTask(index) }}> Delete </button>
           </div>
     })
@@ -63,10 +63,13 @@ const page = () => {
     setmainTask(clonedTaskArr);
   }
 
-  const completeTask = (eventDiv) => {
-    let liDiv = eventDiv.parentNode;
-    liDiv.children[0].textContent = "✅  " + liDiv.children[0].textContent;
-    liDiv.style.color = "green";
+  const completeTask = (index) => {
+    let clonedArr = [...mainTask];
+    clonedArr[index].completed = true;
+    setmainTask(clonedArr);
+    // let liDiv = eventDiv.parentNode;
+    // liDiv.children[0].textContent = "✅  " + liDiv.children[0].textContent;
+    // liDiv.style.color = "green";
   }
 
   return (

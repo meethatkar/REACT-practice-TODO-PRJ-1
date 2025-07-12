@@ -29,7 +29,7 @@ const Input = (props) => {
       // COOKIES TRYING
       // Cookies.set('task-dets', JSON.stringify({ title, desc }), { expires: 7 });
 
-      props.sendChildData({ title, desc })
+      props.sendChildData({ title, desc, completed:false })
       settitle("");
       setdesc("");
     }
