@@ -26,10 +26,9 @@ const Input = (props) => {
       document.querySelector("#description>.error-div").style.display = "none";
       document.querySelector("#title>.error-div").style.display = "none";
 
-      // COOKIES TRYING
-      // Cookies.set('task-dets', JSON.stringify({ title, desc }), { expires: 7 });
 
-      props.sendChildData({ title, desc, completed:false })
+      props.sendChildData({ title, desc, completed:false , id:Date.now()});
+  
       settitle("");
       setdesc("");
     }

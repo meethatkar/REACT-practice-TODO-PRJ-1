@@ -9,23 +9,23 @@ const page = () => {
   const [mainTask, setmainTask] = useState([]);
 
   const getChildData = (childData) => {
-    setmainTask([...mainTask, childData]);
-
-    // COOKIES TRYING
-    // let cookieData = JSON.parse(Cookies.get('task-dets'));
-    // console.log(cookieData);
-    // setmainTask([...mainTask,cookieData]);
-
+      setmainTask([...mainTask, childData]);
+    
   }
+
+  useEffect(()=>{
+    let localData = JSON.parse(localStorage.getItem("tasksData"));
+    if(localData){
+      setmainTask(localData);
+    }
+  }, [])
+
+  useEffect(()=>{
+    localStorage.setItem("tasksData",JSON.stringify(mainTask));
+  }, [mainTask])
 
   let renderTask = <p className='text-center text-xl font-medium'> No task Added !! </p>
   let renderStateMob = <p className='text-center text-xl font-medium'> No task Added !! </p>
-
-  // COOKIES TRYING
-  // useEffect(() => {
-  //   console.log("mainTask updated:", mainTask);
-  //   Cookies.set("main-tasks",mainTask);
-  // }, [mainTask]);
 
 
   if (mainTask.length > 0) {
@@ -35,7 +35,7 @@ const page = () => {
     reverse() just changes the order to show latest tasks first.
     */
     renderTask = mainTask.map((task, index) => {
-      return <li className='grid grid-cols-[80px_200px_1fr_150px_150px] text-lg gap-4 mb-5' key={index}>
+      return <li className='grid grid-cols-[80px_200px_1fr_150px_150px] text-lg gap-4 mb-5' key={task.id}>        {/* task.id store date & time with milliseconds & so unique for every task., better options then index */}
         {/* key acts like ID, if compulosory in react, as react identifies each unquie li using key only. */}
         <p> {task.completed ? "✅ " + (index+1) :  (index+1)} </p>
         <p>  {task.title} </p>
@@ -46,7 +46,7 @@ const page = () => {
     })
 
     renderStateMob = mainTask.map((task,index)=>{
-      return <div className="task pb-3 border-b-1 border-b-gray-400 flex flex-col" key={index}>
+      return <div className="task pb-3 border-b-1 border-b-gray-400 flex flex-col" key={task.id}>
             <h3 className='text-2xl font-medium'> {task.completed ? "✅ Task " + (index+1) : "Task " + (index+1)} </h3>
             <div id="title-mob" className='flex gap-4'> <span className='min-w-[105px] font-medium'> Title:- </span>  <h5> {task.title} </h5> </div>
             <div id="desc-mob" className='flex gap-4'> <span className='min-w-[100px] font-medium'> Description:- </span>  <h5> {task.desc} </h5> </div>
@@ -74,7 +74,7 @@ const page = () => {
 
   return (
     <div id="wrapper" className='md:bg-gradient-to-br md:from-[#CFB908] md:via-[#39A68B] md:to-[#1339B9] min-h-screen w-screen flex items-center justify-center '>
-      <div id="container" className='bg-white w-screen min-h-[100%] md:h-auto md:w-10/12 md:w-3/4 py-6 px-8 rounded-xl text-black md:shadow-md shadow-black/70 flex flex-col items-center gap-5'>
+      <div id="container" className='bg-white w-screen min-h-[100%] md:h-auto md:w-10/12 py-6 px-8 rounded-xl text-black md:shadow-md shadow-black/70 flex flex-col items-center gap-5'>
         <img src="./Screenshot 2025-07-11 235240.png" alt="" className='h-18 md:h-25' />
         <h1 className='text-2xl md:text-4xl font-medium'> Todo List App</h1>
         <p className='-mt-3 text-gray-500 text-lg text-center '> Create your Task(s) and get organised today </p>
